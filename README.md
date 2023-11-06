@@ -1,11 +1,11 @@
 #Redistribution Tool
-Build Electorates from SA1 
+Tool to assist people in Building Australian COmmonwealth electorates from SA2 
 
 #Stakeholders
-Individiuals building submissions for Redistributions
+Individuals building submissions for Redistributions
+
 #Inputs
 Population projection from AEC
-Shapefiles from ABS geography
 
 #Outputs 
 RShiny 
