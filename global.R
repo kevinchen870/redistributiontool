@@ -17,7 +17,7 @@ SA2 = readRDS('files/SA2.rds')
 
 CED =  readRDS('files/CED.rds')
 
-Popdata = read.xlsx("files/Victoria-SA1.xlsx") %>%
+Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
   filter(Division != 'VIC TOTAL') %>%
   mutate(sa1_code_2021 = 
            as.character(`Statistical.Area.Level.1.(SA1).(2021.SA1s)`)) %>%
@@ -30,7 +30,7 @@ SA1 = SA1 %>%
 #Create summaries
 Pop_data_summary_SA2 = Popdata %>%
   group_by(`Statistical.Area.Level.2.(SA2).Code.(2021.SA2s)`,
-           `Statistical.Area.Level.2.(SA2).Name`,
+           `Statistical.Area.Level.2.(SA2).Name.(2021.SA2s)`,
            Division) %>%
   summarise(tot_current = sum(Actual.enrolment.Wednesday.9.August.2023),
             tot_project = sum(tot_project)) %>%
@@ -68,3 +68,4 @@ pal <- colorBin(
   palette = "Spectral",
   domain = Pop_data_summary_CED$deviation_2028,
   bins = 5)
+
