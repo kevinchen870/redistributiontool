@@ -1,27 +1,27 @@
 #Define UI of app
 ui = fluidPage(
   
-  titlePanel('Redistribution Tool v0.1'),
-  "Click on map to build from SA2",
+  titlePanel('Redistribution Tool v0.2'),
+  tags$div(
+    "Please allow a minute for the map to load up.",
+    tags$br(),
+    "Click on the polygon to build from SA1. Press finished on the polygon, and then display data to see the table and projected total.",
+    tags$br(),
+    "To edit the points, click on the writing tool and move the points of the box.", 
+    tags$br(),
+    "Before beginning a new electorate or area, Please clear the current shape using the rubbish icon, 'Clear All'."),
   
-  leafletOutput("map"),
   tags$div(tags$br()),
-  actionButton("screenshot", "Save current map view"),
+  editModUI('editor'),
   tags$div(tags$br()),
-  selectizeInput(inputId = "selected_locations",
-                 label = "Selected SA2s:",
-                 choices = SA2$SA2_NAME21,
-                 selected = NULL,
-                 multiple = TRUE,
-                 width = '80%'),
-  tags$div(tags$br()),
-  actionButton("ClearSelection", "Clear all"),
+  actionButton("save", "Display current shape"),
+  # actionButton("screenshot", "Screenshot current map view"),
   tags$div(tags$br()),
   
-  'List of SA2s being used',
+  'List of SA1s being used',
   
-  dataTableOutput("SA2.table"),
-  'Total projected population of SA2s selected',
+  dataTableOutput("SA1.table"),
+  'Total projected population of SA1s selected',
   tags$div(tags$br()),
   dataTableOutput("Total.table"),
   
@@ -29,7 +29,7 @@ ui = fluidPage(
     class = "footer",
     div(
       style = "max-width: 600px; display: inline-block; text-align: left",
-      "Created by Kevin Chen November 2023"
+      "Created by Kevin Chen. Please send feedback to kevinchen870@gmail.com"
     ),
     align = "center"
   )

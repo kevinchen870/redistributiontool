@@ -1,3 +1,4 @@
+#Load global packages
 library(sf)
 library(raster)
 library(dplyr)
@@ -8,17 +9,13 @@ library(shiny)
 library(DT)
 library(strayr)
 library(shinyscreenshot)
-library(mapedit)
-library(leaflet.extras)
-sf::sf_use_s2(FALSE)
+
 #Read in data
 SA1 = readRDS('files/SA1.rds')
 
 SA2 = readRDS('files/SA2.rds')
 
 CED =  readRDS('files/CED.rds')
-
-lga = read_absmap('lga2022')
 
 Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
   filter(Division != 'VIC TOTAL') %>%
@@ -28,9 +25,7 @@ Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
 
 SA1 = SA1 %>%
   subset(state_code_2021 == '2') %>%
-  left_join(Popdata, by = 'sa1_code_2021') %>%
-  rename(sa1_7code_2021 = 
-           `Statistical.Area.Level.1.(SA1).Code.(7-digit).(2021.SA1s)`)
+  left_join(Popdata, by = 'sa1_code_2021')
 
 #Create summaries
 Pop_data_summary_SA2 = Popdata %>%
@@ -44,6 +39,11 @@ Pop_data_summary_SA2 = Popdata %>%
            as.character(`Statistical.Area.Level.2.(SA2).Code.(2021.SA2s)`)) %>%
   setNames(c('SA2.Code','SA2.Name','Division','tot_current', 
              'tot_project','SA2_CODE21'))
+
+
+SA2 = SA2 %>%
+  subset(state_code_2021 == '2') %>%
+  left_join(Pop_data_summary_SA2, by = c('sa2_code_2021' = 'SA2_CODE21'))
 
 
 Pop_data_summary_CED = Pop_data_summary_SA2 %>%
@@ -68,3 +68,4 @@ pal <- colorBin(
   palette = "Spectral",
   domain = Pop_data_summary_CED$deviation_2028,
   bins = 5)
+

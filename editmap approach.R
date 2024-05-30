@@ -131,7 +131,14 @@ pal <- colorBin(
 ui = fluidPage(
   
   titlePanel('Redistribution Tool v0.2'),
-  "Click on the polygon to build from SA1. Press finished on the polygon, and then display data to see the table and projected total. ",
+  tags$div(
+  "Please allow a minute for the map to load up.",
+  tags$br(),
+  "Click on the polygon to build from SA1. Press finished on the polygon, and then display data to see the table and projected total.",
+  tags$br(),
+  "To edit the points, click on the writing tool and move the points of the box.", 
+  tags$br(),
+  "Before beginning a new electorate or area, Please clear the current shape using the rubbish icon, 'Clear All'."),
   
   # selectizeInput(inputId = "Division",
   #                label = "Select Division",
@@ -144,7 +151,7 @@ ui = fluidPage(
   editModUI('editor'),
   tags$div(tags$br()),
   actionButton("save", "Display current shape"),
-  actionButton("screenshot", "Screenshot current map view"),
+  # actionButton("screenshot", "Screenshot current map view"),
   tags$div(tags$br()),
   # selectizeInput(inputId = "selected_locations",
   #                label = "Selected SA1s:",
@@ -167,7 +174,7 @@ ui = fluidPage(
     class = "footer",
     div(
       style = "max-width: 600px; display: inline-block; text-align: left",
-      "Created by Kevin Chen November 2023"
+      "Created by Kevin Chen. Please send feedback to kevinchen870@gmail.com"
     ),
     align = "center"
   )
@@ -293,7 +300,11 @@ server <- function(input, output, session){
                                  list(extend = 'copy',text = 'Copy'))))
   }, server = FALSE)
   
-  output$Total.table = renderDataTable({
+  # observeEvent(input$screenshot, {
+  #   screenshot(selector = "#editor-map",filename = 'CurrentMapView')
+  # })
+
+    output$Total.table = renderDataTable({
     SA1 %>% 
       filter(sa1_code_2021 %in% SA1_selected$sa1_code_2021) %>%
       mutate(Division = str_to_title(Division)) %>%
