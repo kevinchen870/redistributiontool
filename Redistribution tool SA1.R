@@ -1,5 +1,4 @@
 library(sf)
-library(raster)
 library(dplyr)
 library(leaflet)
 library(openxlsx)
