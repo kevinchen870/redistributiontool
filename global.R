@@ -32,7 +32,7 @@ Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
   rename(tot_project = Projected.enrolment.Monday.17.April.2028)
 
 #New data from May
-popdata.May = read.xlsx("~/redistributiontool/files/Vic May 2024-proposed-electoral-divisions-SA1-and-SA2.xlsx") %>%
+popdata.May = read.xlsx("files/Vic May 2024-proposed-electoral-divisions-SA1-and-SA2.xlsx") %>%
   filter(!is.na(`SA1.Code.(2021.SA1s)`)) %>%
   mutate(sa1_code_2021 = 
            as.character(`SA1.Code.(2021.SA1s)`)) %>%
