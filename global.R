@@ -20,7 +20,7 @@ CED =  readRDS('files/CED.rds')
 
 New_Divisions_May = readRDS('files/NewCED.rds') 
 
-lga = read_absmap('lga2022')
+lga = readRDS('files/LGA.rds')
 
 Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
   filter(Division != 'VIC TOTAL') %>%
@@ -28,16 +28,11 @@ Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
            as.character(`Statistical.Area.Level.1.(SA1).(2021.SA1s)`),
          `Statistical.Area.Level.1.(SA1).Code.(7-digit).(2021.SA1s)` = 
            as.character(`Statistical.Area.Level.1.(SA1).Code.(7-digit).(2021.SA1s)`),
-  ) %>%
-  rename(tot_project = Projected.enrolment.Monday.17.April.2028)
+  )
 
-#New data from May
-popdata.May = read.xlsx("files/Vic May 2024-proposed-electoral-divisions-SA1-and-SA2.xlsx") %>%
-  filter(!is.na(`SA1.Code.(2021.SA1s)`)) %>%
-  mutate(sa1_code_2021 = 
-           as.character(`SA1.Code.(2021.SA1s)`)) %>%
-  rename(tot_project = `Projected.Enrolment.17/04/28`)
-
+#new may Data
+popdata.May =readRDS('files/PopdataMay.RDS')
+  
 
 Popdata = Popdata %>%
   select(sa1_code_2021,`Statistical.Area.Level.2.(SA2).Code.(2021.SA2s)`, `Statistical.Area.Level.1.(SA1).Code.(7-digit).(2021.SA1s)`,`Statistical.Area.Level.1.(SA1).(2021.SA1s)`) %>%
@@ -45,6 +40,7 @@ Popdata = Popdata %>%
 
 SA1 = SA1 %>%
   subset(state_code_2021 == '2') %>%
+  filter(!is.na(cent_lat)) %>%
   left_join(Popdata, by = 'sa1_code_2021') %>%
   rename(sa1_7code_2021 = 
            `Statistical.Area.Level.1.(SA1).Code.(7-digit).(2021.SA1s)`,
