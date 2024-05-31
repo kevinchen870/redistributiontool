@@ -1,0 +1,13 @@
+name: redistributiontoolSA1
+title: redistributiontoolSA1
+username: kevinchen870
+account: kevinchen870
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12100168
+bundleId: 8681798
+url: https://kevinchen870.shinyapps.io/redistributiontoolSA1/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: editmap approach.R|leaflet code.R|Redistribution tool SA1.R|SA2 app/global.R|SA2 app/server.R|SA2 app/ui.R

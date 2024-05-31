@@ -230,12 +230,19 @@ server <- function(input, output, session){
         addPolygons(data = lga %>%filter(state_code_2021 == 2),
                     fillColor = "white",
                     fillOpacity = 0.3,
-                    color = "blue",
+                    color = "green",
                     stroke = TRUE,
-                    weight = 4,
+                    weight = 1,
                     layerId = ~lga_code_2022,
                     group = "LGA",
                     label = ~lga_name_2022) %>%
+        addPolygons(data = New_Divisions_May,
+                    color = "blue",
+                    stroke = TRUE,
+                    weight = 3,
+                    layerId = ~Sortname,
+                    group = "Proposed Divisions",
+                    label = ~Sortname) %>%
       # Layers control
       addLayersControl(
         overlayGroups = c("Current Divisions", "SA1", 'LGA'),

@@ -5,11 +5,13 @@ ui = fluidPage(
   tags$div(
     "Please allow a minute for the map to load up.",
     tags$br(),
+    "You can toggle the SA1, council boundary and current divisions on and off.",
+    tags$br(),
     "Click on the polygon to build from SA1. Press finished on the polygon, and then display data to see the table and projected total.",
     tags$br(),
-    "To edit the points, click on the writing tool and move the points of the box.", 
+    "To edit the points, click on the edit layers tool and move the points of the box.", 
     tags$br(),
-    "Before beginning a new electorate or area, Please clear the current shape using the rubbish icon, 'Clear All'."),
+    "Before beginning a new electorate or area, Please clear the current shape by clicking 'Clear All' in the delete layers icon."),
   
   tags$div(tags$br()),
   editModUI('editor'),
