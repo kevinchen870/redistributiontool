@@ -1,11 +1,11 @@
 name: redistributiontoolSA1
-title: redistributiontoolSA1
+title: redistributiontool
 username: kevinchen870
 account: kevinchen870
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12100168
-bundleId: 8681798
+bundleId: 8683014
 url: https://kevinchen870.shinyapps.io/redistributiontoolSA1/
 version: 1
 asMultiple: FALSE

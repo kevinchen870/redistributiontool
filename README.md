@@ -1,5 +1,5 @@
 #Redistribution Tool
-Tool to assist people in Building Australian COmmonwealth electorates from SA2 
+Tool to assist people in Building Australian COmmonwealth electorates from SA1 
 
 #Stakeholders
 Individuals building submissions for Redistributions
@@ -17,4 +17,27 @@ The Code is split into three components
     Uses the styles.css file for the look fo the app
 3. server: Functionality of the App - what happens when people interact with the functions. 
 
-A standalone code exists 'leaflet' which was built for prototyping
+A standalone code exists 'editmap' which was built for prototyping
+
+#To Do
+add SA1 to user created division template - DONE
+
+Build UI to upload user file
+change to tab format
+Download template
+User upload section
+Leaflet map
+User saves html
+
+
+Build Server functions
+Download Template
+
+Merge uploaded SA1 file with SA1s 
+dissolve by new group
+create leaflet
+centre on divisions midpoint
+label contains new total pop and deviation from quota
+SA2, current, proposed turned off by default
+
+save as html 
