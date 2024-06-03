@@ -14,7 +14,7 @@ sf::sf_use_s2(FALSE)
 #Read in data
 SA1 = readRDS('files/SA1.rds')
 
-SA2 = readRDS('files/SA2.rds')
+SA2 = readRDS('files/SA2.rds') 
 
 CED =  readRDS('files/CED.rds')
 
