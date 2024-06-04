@@ -1,6 +1,99 @@
 #Server functions
 
-server <- function(input, output, session){
+server <- function(input, output) {
+  #template
+  output$downloadTemplate <- downloadHandler(
+    filename = 'SA1 to Division mapping template.csv',
+    content = function(file) {
+      file.copy('files/blank SA1 template.csv', file, row.names=FALSE)
+    })
+  
+  
+  basemap <- leaflet() %>%
+    addTiles() %>%
+    addPolygons(data = lga %>% filter(state_code_2021 == 2),
+                fillColor = "white",
+                fillOpacity = 0,
+                color = "yellow",
+                stroke = TRUE,
+                weight = 2,
+                group = "LGA",
+                label = ~lga_name_2022) %>%
+    addPolygons(data = SA2 %>% filter(state_code_2021 == 2,
+                                      !is.na(cent_lat)),
+                fillColor = "white",
+                fillOpacity = 0,
+                color = "green",
+                stroke = TRUE,
+                weight = 1,
+                group = "SA2",
+                label = SA2$SA2_code_2021) %>%
+    addPolygons(data = New_Divisions_May %>% sf::st_zm(),
+                fillColor = 'white',
+                fillOpacity = 0,
+                color = "blue",
+                stroke = TRUE,
+                weight = 2,
+                group = "Proposed Divisions",
+                label = lapply(paste0("Division: ",
+                                      str_to_title(New_Divisions_May$Sortname),'<br>',
+                                      "Projected Population: ",
+                                      New_Divisions_May$Projected),
+                               htmltools::HTML))  %>%
+    addPolygons(data= shp_CED, 
+                fillOpacity =0.0,
+                weight = 2, stroke = TRUE, 
+                color = 'red',
+                group = 'Current Divisions', 
+                label = lapply(paste0("Division: ",
+                                      str_to_title(shp_CED$ced_name_2021),'<br>',
+                                      "Projected Population: ",
+                                      shp_CED$tot_project),
+                               htmltools::HTML)) %>%
+    addLayersControl(
+      overlayGroups = c("Current Divisions", 'LGA',"Proposed Divisions", 'SA2'),
+      options = layersControlOptions(collapsed = TRUE))
+  
+  output$SA1mapping <- renderLeaflet({basemap})
+  
+  observe({
+    req(input$userSA1upload)
+    SA1_user <- read.csv(input$userSA1upload$datapath,
+                         colClasses = c(rep('character',6))) %>%
+      setNames(c('RowNumber', 'sa1_7_digit_code','sa1_code_2021',
+                 'Current Division','Proposed Division', 'Your Division Name')) %>%
+      filter(!is.na(`Your Division Name`) & trimws(`Your Division Name`) !="") %>%
+      left_join(SA1, by = 'sa1_code_2021') %>%
+      group_by(`Your Division Name`) %>%
+      summarise(projected = sum(tot_project),
+                geometry = st_union(geometry)) %>%
+      st_as_sf()
+    
+    proxy <- leafletProxy("SA1mapping") 
+    
+    proxy %>% 
+      addPolygons(data = SA1_user,
+                  fillColor = 'white',
+                  fillOpacity = 0,
+                  color = "black",
+                  stroke = TRUE,
+                  weight = 3,
+                  group = "Your Divisions",
+                  label = lapply(paste0("Your Division: ",
+                                        str_to_title(SA1_user$`Your Division Name`),'<br>',
+                                        "Projected Population: ",
+                                        SA1_user$projected),
+                                 htmltools::HTML)) %>%
+      addLayersControl(
+        overlayGroups = c("Current Divisions", 'LGA',"Proposed Divisions",'SA2', 'Your Divisions'),
+        options = layersControlOptions(collapsed = TRUE)) %>%
+      hideGroup("Current Divisions") %>%
+      hideGroup("LGA") %>%
+      hideGroup("Proposed Divisions") %>%
+      hideGroup('SA2')
+  })
+  
+  
   
   #create empty vector to hold all click ids
   selected_ids <- reactiveValues(ids = vector())
@@ -75,17 +168,17 @@ server <- function(input, output, session){
                           options = layersControlOptions(collapsed = TRUE)) %>%
                         #Hide clickable groups
                         hideGroup(group = SA1$sa1_code_2021), #%>%
-                        #Add deviation legend
-                        # addLegend(values = shp_CED$deviation_2028,position = 'bottomright',
-                        #           title = 'deviation from projected (%)',
-                        #           colors = c("#D53E4F", "#FC8D59", "#FEE08B", 
-                        #                      "#E6F598", "#99D594", "#3288BD"),
-                        #           labels = c('-8% - -6%',
-                        #                      '-6%- -4%',
-                        #                      '-4% - -2%',
-                        #                      '-2% - 0%',
-                        #                      '0% - 2%',
-                        #                      '2% - 4%')),
+                      #Add deviation legend
+                      # addLegend(values = shp_CED$deviation_2028,position = 'bottomright',
+                      #           title = 'deviation from projected (%)',
+                      #           colors = c("#D53E4F", "#FC8D59", "#FEE08B", 
+                      #                      "#E6F598", "#99D594", "#3288BD"),
+                      #           labels = c('-8% - -6%',
+                      #                      '-6%- -4%',
+                      #                      '-4% - -2%',
+                      #                      '-2% - 0%',
+                      #                      '0% - 2%',
+                      #                      '2% - 4%')),
                       editor = 'leaflet.extras',
                       editorOptions =list(polylineOptions = FALSE,
                                           circleOptions = FALSE,
@@ -126,7 +219,7 @@ server <- function(input, output, session){
                   extensions = 'Buttons',
                   escape=FALSE,
                   options = list(lengthChange = F,
-                                 scrollX = "auto",
+                                 scrollY = "true",
                                  dom = 'Bfrtip',
                                  buttons = list( 
                                    list(extend = 'csv',   
@@ -153,7 +246,7 @@ server <- function(input, output, session){
                   extensions = 'Buttons',
                   escape=FALSE,
                   options = list(lengthChange = F,
-                                 scrollX = "auto",
+                                 scrollY = "true",
                                  dom = 'Bfrtip',
                                  buttons = c('copy')))
     })

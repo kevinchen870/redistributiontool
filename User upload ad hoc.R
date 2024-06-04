@@ -38,19 +38,17 @@ user_upload = SA1 %>%
 
 write.csv(user_upload, 'files/blank SA1 template.csv')
 
-read.csv('files/blank SA1 template.csv')
+test = read.csv('C:/Users/kevin/Downloads/SA1 to Division mapping template.csv',
+                colClasses = c(rep('character',6))) %>%
+  setNames(c('RowNumber', 'sa1_7_digit_code','sa1_code_2021',
+             'Current Division','Proposed Division', 'Your Division Name')) %>%
+  filter(!is.na(`Your Division Name`) & trimws(`Your Division Name`) !="") %>%
+  left_join(SA1, by = 'sa1_code_2021') %>%
+  group_by(`Your Division Name`) %>%
+  summarise(projected = sum(tot_project),
+            geometry = st_union(geometry)) %>%
+  st_as_sf()
 
-
-
-
-SA1_merge = user_upload %>%
-  left_join(readRDS('files/SA1.rds'),by = 'sa1_code_2021') 
-
-
-test = user_upload %>%
-  filter(!`Your Divsion Name` =='')
-testSA2= SA2 %>%filter(state_code_2021 == 2,
-                       !is.na(cent_lat))
 
 #UI
 ui = navbarPageWithLogo(
@@ -81,13 +79,15 @@ ui = navbarPageWithLogo(
     tags$br(),
     tags$div('Please allow a minute for the map to load'),
     tags$br(),
-    leafletOutput("SA1mapping"),
-    tags$div(tags$br()),
-  )),
+    tags$style(type = "text/css", "#SA1mapping {width:100; height: calc(100vh - 240px) !important;}"),
+    fillPage(leafletOutput("SA1mapping"))
+    )
+  ),
   
   tabPanel(
     title = 'Build From SA1',
     tags$head(includeCSS("styles.css")),
+    style = "height: 90vh; overflow-y: auto;",
     tags$br(),
     tags$br(),
     tags$br(),
@@ -109,7 +109,6 @@ ui = navbarPageWithLogo(
     tags$div(tags$br()),
     
     'List of SA1s being used',
-    
     dataTableOutput("SA1.table"),
     'Total projected population of SA1s selected',
     tags$div(tags$br()),
@@ -118,7 +117,6 @@ ui = navbarPageWithLogo(
   tags$footer(
     class = "footer",
     div(
-      style = "max-width: 600px; display: inline-block; text-align: left",
       "Created by Kevin Chen. Please send feedback to kevinchen870@gmail.com"
     ),
     align = "center"
@@ -183,18 +181,21 @@ server <- function(input, output) {
   
   observe({
     req(input$userSA1upload)
-    SA1_user <- read.csv(input$userSA1upload$datapath) %>%
-      filter(!is.na(`Your Division Name`) | !`Your Divsion Name` =='') %>%
-      left_join(SA1, by = sa1_code_2021) %>%
+    SA1_user <- read.csv(input$userSA1upload$datapath,
+                         colClasses = c(rep('character',6))) %>%
+      setNames(c('RowNumber', 'sa1_7_digit_code','sa1_code_2021',
+                 'Current Division','Proposed Division', 'Your Division Name')) %>%
+      filter(!is.na(`Your Division Name`) & trimws(`Your Division Name`) !="") %>%
+      left_join(SA1, by = 'sa1_code_2021') %>%
       group_by(`Your Division Name`) %>%
-      summarise(Projected = sum(tot_project))
-      st_make_valid() %>% 
-      st_union()
+      summarise(projected = sum(tot_project),
+                geometry = st_union(geometry)) %>%
+      st_as_sf()
     
     proxy <- leafletProxy("SA1mapping") 
     
     proxy %>% 
-      addPolygons(data = SA1_user%>% sf::st_zm(),
+      addPolygons(data = SA1_user,
                   fillColor = 'white',
                   fillOpacity = 0,
                   color = "black",
@@ -202,9 +203,9 @@ server <- function(input, output) {
                   weight = 3,
                   group = "Your Divisions",
                   label = lapply(paste0("Your Division: ",
-                                        str_to_title(SA1_user$`User Division Name`),'<br>',
+                                        str_to_title(SA1_user$`Your Division Name`),'<br>',
                                         "Projected Population: ",
-                                        SA1_user$Projected),
+                                        SA1_user$projected),
                                  htmltools::HTML)) %>%
       addLayersControl(
         overlayGroups = c("Current Divisions", 'LGA',"Proposed Divisions",'SA2', 'Your Divisions'),
@@ -214,6 +215,9 @@ server <- function(input, output) {
       hideGroup("Proposed Divisions") %>%
       hideGroup('SA2')
     })
+  
+  
+  
   #create empty vector to hold all click ids
   selected_ids <- reactiveValues(ids = vector())
   
@@ -338,7 +342,7 @@ server <- function(input, output) {
                   extensions = 'Buttons',
                   escape=FALSE,
                   options = list(lengthChange = F,
-                                 scrollX = "auto",
+                                 scrollY = "true",
                                  dom = 'Bfrtip',
                                  buttons = list( 
                                    list(extend = 'csv',   
@@ -365,7 +369,7 @@ server <- function(input, output) {
                   extensions = 'Buttons',
                   escape=FALSE,
                   options = list(lengthChange = F,
-                                 scrollX = "auto",
+                                 scrollY = "true",
                                  dom = 'Bfrtip',
                                  buttons = c('copy')))
     })
@@ -373,3 +377,4 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
+
