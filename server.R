@@ -5,7 +5,7 @@ server <- function(input, output) {
   output$downloadTemplate <- downloadHandler(
     filename = 'SA1 to Division mapping template.csv',
     content = function(file) {
-      file.copy('files/blank SA1 template.csv', file, row.names=FALSE)
+      file.copy('files/blank SA1 template.csv', file)
     })
   
   

@@ -90,3 +90,4 @@ pal <- colorBin(
   palette = "Spectral",
   domain = Pop_data_summary_CED$deviation_2028,
   bins = 5)
+

@@ -38,16 +38,6 @@ user_upload = SA1 %>%
 
 write.csv(user_upload, 'files/blank SA1 template.csv')
 
-test = read.csv('C:/Users/kevin/Downloads/SA1 to Division mapping template.csv',
-                colClasses = c(rep('character',6))) %>%
-  setNames(c('RowNumber', 'sa1_7_digit_code','sa1_code_2021',
-             'Current Division','Proposed Division', 'Your Division Name')) %>%
-  filter(!is.na(`Your Division Name`) & trimws(`Your Division Name`) !="") %>%
-  left_join(SA1, by = 'sa1_code_2021') %>%
-  group_by(`Your Division Name`) %>%
-  summarise(projected = sum(tot_project),
-            geometry = st_union(geometry)) %>%
-  st_as_sf()
 
 
 #UI
