@@ -63,7 +63,11 @@ ui = navbarPageWithLogo(
             accept = c("text/csv",
                        "text/comma-separated-values,text/plain",
                        ".csv")),
-      tags$div(tags$br())),
+      tags$br(),
+      selectizeInput(
+        'statechoice', 'State of redistribution',
+        choices = c('VIC','WA','NSW'))),
+    
   
   mainPanel(
     tags$br(),
