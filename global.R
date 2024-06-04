@@ -12,15 +12,21 @@ library(mapedit)
 library(leaflet.extras)
 sf::sf_use_s2(FALSE)
 #Read in data
-SA1 = readRDS('files/SA1.rds')
+navbarPageWithLogo <- function(...) {
+  navbar <- navbarPage(...)
+  navbar
+}
+SA1 = readRDS('files/SA1.rds') 
 
-SA2 = readRDS('files/SA2.rds') 
+SA2 = readRDS('files/SA2.rds') %>%
+  filter(state_code_2021 == 2,
+         !is.na(cent_lat))
 
 CED =  readRDS('files/CED.rds')
 
 New_Divisions_May = readRDS('files/NewCED.rds') 
 
-lga = readRDS('files/LGA.rds')
+lga = readRDS('files/LGA.rds') %>%  filter(state_code_2021 == 2) 
 
 Popdata = read.xlsx("files/Victoria-SA1 revised.xlsx") %>%
   filter(Division != 'VIC TOTAL') %>%
