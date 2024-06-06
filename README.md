@@ -30,5 +30,9 @@ Prototyping codes are located in ad hoc testing
 - User upload section - DONE
 - Leaflet map - DONE
 - User saves html - Doesn't seem doable
+- Add SA2 to CSV template
 - selector by state for WA and NSW
-- 
+- Add SA2/SA1 clickable
+- Add selector for Division ->SA1
+
+
