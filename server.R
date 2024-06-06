@@ -59,8 +59,8 @@ server <- function(input, output) {
   observe({
     req(input$userSA1upload)
     SA1_user <- read.csv(input$userSA1upload$datapath,
-                         colClasses = c(rep('character',6))) %>%
-      setNames(c('RowNumber', 'sa1_7_digit_code','sa1_code_2021',
+                         colClasses = c(rep('character',))) %>%
+      setNames(c('sa1_7_digit_code','sa1_code_2021',
                  'Current Division','Proposed Division', 'Your Division Name')) %>%
       filter(!is.na(`Your Division Name`) & trimws(`Your Division Name`) !="") %>%
       left_join(SA1, by = 'sa1_code_2021') %>%
