@@ -79,6 +79,7 @@ server <- function(input, output) {
                   stroke = TRUE,
                   weight = 4,
                   group = "Your Divisions",
+                  layerId =  'CustomDivisions',
                   label = lapply(paste0("Your Division: ",
                                         str_to_title(SA1_user$`Your Division Name`),'<br>',
                                         "Projected Population: ",

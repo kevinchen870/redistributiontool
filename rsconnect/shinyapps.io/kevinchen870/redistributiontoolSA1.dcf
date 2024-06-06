@@ -1,13 +1,13 @@
 name: redistributiontoolSA1
-title: redistributiontool
+title: redistributiontoolSA1
 username: kevinchen870
 account: kevinchen870
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12100168
-bundleId: 8683014
+bundleId: 8707834
 url: https://kevinchen870.shinyapps.io/redistributiontoolSA1/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: editmap approach.R|leaflet code.R|Redistribution tool SA1.R|SA2 app/global.R|SA2 app/server.R|SA2 app/ui.R
+ignoredFiles: ad hoc testing/editmap approach.R|ad hoc testing/leaflet code.R|ad hoc testing/Redistribution tool SA1.R|ad hoc testing/User upload ad hoc.R|ad hoc.R|README.md|SA2 app/global.R|SA2 app/server.R|SA2 app/ui.R
