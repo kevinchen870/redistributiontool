@@ -5,7 +5,7 @@ account: kevinchen870
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12100168
-bundleId: 8707834
+bundleId: 8712885
 url: https://kevinchen870.shinyapps.io/redistributiontoolSA1/
 version: 1
 asMultiple: FALSE
