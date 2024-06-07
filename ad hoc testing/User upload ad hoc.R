@@ -39,7 +39,17 @@ user_upload = SA1 %>%
 write.csv(user_upload, 'files/blank SA1 template.csv')
 
 
+test = read.xlsx("files/Vic May 2024-proposed-electoral-divisions-SA1-and-SA2.xlsx") %>%
+  mutate(sa1_7_digit_code = as.character(`SA1.Code.(2021.SA1s)`)) %>%
+  rename(tot_project = `Projected.Enrolment.17/04/28`)
 
+drake = read.csv("C:/Users/kevin/Downloads/Drake - 2nd Draft Proposal.csv") %>%
+  filter(Your.Division.Name =='Scullin') %>%
+  mutate(sa1_7_digit_code = as.character(sa1_7_digit_code)) %>%
+  
+  left_join(test, by = c('sa1_7_digit_code')) %>%
+  summarise(total = sum(tot_project))
+drake
 #UI
 ui = navbarPageWithLogo(
   title = "Redistribution Tool",
