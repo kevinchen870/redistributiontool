@@ -59,7 +59,8 @@ server <- function(input, output) {
                                htmltools::HTML)) %>%
     addLayersControl(
       overlayGroups = c("Current Divisions", 'LGA',"Proposed Divisions", 'SA2'),
-      options = layersControlOptions(collapsed = TRUE))
+      options = layersControlOptions(collapsed = TRUE)) %>%
+    addFullscreenControl()
   
   output$SA1mapping <- renderLeaflet({basemap})
   
@@ -177,6 +178,7 @@ server <- function(input, output) {
                         addLayersControl(
                           overlayGroups = c("Current Divisions", "SA1", 'LGA',"Proposed Divisions"),
                           options = layersControlOptions(collapsed = TRUE)) %>%
+                        addFullscreenControl() %>%
                         #Hide clickable groups
                         hideGroup(group = SA1$sa1_code_2021), #%>%
                       #Add deviation legend
